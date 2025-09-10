@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:frontend",
-    "build:frontend": "cd frontend && npm install && npm run build",
-    "build:backend": "cd backend && npm install",
+    "build": "echo 'Build step handled by Railway'",
+    "build:frontend": "cd frontend && npm ci && npm run build",
+    "build:backend": "cd backend && npm ci",
     "start:production": "npm run build:frontend && npm run build:backend && cd backend && npm start",
     "vercel-build": "cd frontend && npm install && npm run build"
   },
