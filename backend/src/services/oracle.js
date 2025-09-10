@@ -76,7 +76,7 @@ class BlockchainService {
       const sepoliaPath = path.join(__dirname, '..', '..', '..', 'deployments', 'sepolia.json');
       const hardhatPath = path.join(__dirname, '..', '..', '..', 'deployments', 'hardhat.json');
       let deployment;
-      
+
       if (fs.existsSync(sepoliaPath)) {
         deployment = JSON.parse(fs.readFileSync(sepoliaPath, 'utf8'));
         console.log('Using Sepolia deployment');
@@ -93,13 +93,32 @@ class BlockchainService {
             ReputationRegistry: process.env.REPUTATION_ADDRESS
           }
         };
+        console.log('Using contract addresses from environment variables');
       }
 
-      // Load ABIs
+      // Resolve ABIs from repo (frontend/src/contracts) first; fallback to hardhat artifacts if present
+      const repoContractsPath = path.join(__dirname, '..', '..', '..', 'frontend', 'src', 'contracts');
       const artifactsPath = path.join(__dirname, '..', '..', '..', 'artifacts', 'contracts');
-      
+
+      const loadAbi = (filename) => {
+        // Try frontend/src/contracts first (for production)
+        const repoPath = path.join(repoContractsPath, filename);
+        if (fs.existsSync(repoPath)) {
+          const json = JSON.parse(fs.readFileSync(repoPath, 'utf8'));
+          return json.abi || json; // support both flattened ABI or full artifact shape
+        }
+        // Try hardhat artifacts as fallback (for dev)
+        const contractName = filename.replace('.json', '');
+        const artifactPath = path.join(artifactsPath, `${contractName}.sol`, filename);
+        if (fs.existsSync(artifactPath)) {
+          const json = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
+          return json.abi || json;
+        }
+        throw new Error(`ABI not found for ${filename}`);
+      };
+
       // InvoiceNFT
-      const invoiceNFTABI = require(path.join(artifactsPath, 'InvoiceNFT.sol', 'InvoiceNFT.json')).abi;
+      const invoiceNFTABI = loadAbi('InvoiceNFT.json');
       this.contracts.invoiceNFT = new ethers.Contract(
         deployment.contracts.InvoiceNFT,
         invoiceNFTABI,
@@ -107,7 +126,7 @@ class BlockchainService {
       );
 
       // Funding
-      const fundingABI = require(path.join(artifactsPath, 'Funding.sol', 'Funding.json')).abi;
+      const fundingABI = loadAbi('Funding.json');
       this.contracts.funding = new ethers.Contract(
         deployment.contracts.Funding,
         fundingABI,
@@ -115,7 +134,7 @@ class BlockchainService {
       );
 
       // MockUSDC
-      const mockUSDCABI = require(path.join(artifactsPath, 'MockUSDC.sol', 'MockUSDC.json')).abi;
+      const mockUSDCABI = loadAbi('MockUSDC.json');
       this.contracts.mockUSDC = new ethers.Contract(
         deployment.contracts.MockUSDC,
         mockUSDCABI,
