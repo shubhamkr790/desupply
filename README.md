@@ -9,7 +9,7 @@
 DeSupply revolutionizes supply chain finance by tokenizing invoices as NFTs, enabling suppliers to get immediate liquidity while providing buyers and lenders with transparent, secure trading mechanisms.
 
 ### 🔗 Live Demo
-- **🌐 Frontend**: Deploying on Railway... *(URL will be available shortly)*
+- **🌐 Frontend**: [DeSupply](https://desupply-production.up.railway.app/)
 - **⛓️ Smart Contracts**: Deployed on Sepolia Testnet
 - **🔧 Backend API**: RESTful API with Oracle integration
 - **📊 Repository**: [GitHub - DeSupply](https://github.com/shubhamkr790/desupply)
@@ -235,7 +235,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👥 Team
 
-Built by blockchain developers passionate about revolutionizing supply chain finance through decentralization.
+👥 Team
+- Shubham Kumar – Full Stack Blockchain Developer | [GitHub](https://github.com/shubhamkr790) | [LinkedIn](https://linkedin.com/in/shubhamkr790)
+- Komal Kumari – Graphic Designer | [LinkedIn](https://linkedin.com/in/komal-kumari-795319298)
+
 
 ---
 
