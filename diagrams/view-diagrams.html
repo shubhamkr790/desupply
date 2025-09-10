@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeSupply - System Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .diagram-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏗️ DeSupply System Diagrams</h1>
+        
+        <div class="diagram-section">
+            <h2>System Architecture</h2>
+            <p class="description">
+                Complete system architecture showing the interaction between Frontend (React), 
+                Backend (Express/Oracle), Blockchain (Smart Contracts), and External Services.
+            </p>
+            <div class="mermaid">
+                graph TB
+                    subgraph "Frontend Layer"
+                        UI[React Frontend]
+                        WC[Web3 Wallet<br/>MetaMask]
+                    end
+                    
+                    subgraph "Backend Layer"
+                        API[Express API Server]
+                        Oracle[Oracle Service]
+                        DB[(SQLite Database)]
+                    end
+                    
+                    subgraph "Blockchain Layer"
+                        subgraph "Smart Contracts"
+                            NFT[InvoiceNFT Contract]
+                            Fund[Funding Contract]
+                            Rep[Reputation Registry]
+                            USDC[MockUSDC Token]
+                        end
+                    end
+                    
+                    subgraph "External Services"
+                        GST[GST Verification<br/>Mock]
+                        ERP[ERP System<br/>Mock]
+                        LOG[Logistics API<br/>Mock]
+                        IPFS[IPFS Storage<br/>Mock]
+                    end
+                    
+                    subgraph "Users"
+                        Supplier[MSME Supplier]
+                        Buyer[Corporate Buyer]
+                        Lender[Investor/Lender]
+                    end
+                    
+                    %% User interactions
+                    Supplier --> UI
+                    Buyer --> UI
+                    Lender --> UI
+                    
+                    %% Frontend connections
+                    UI <--> WC
+                    UI <--> API
+                    WC <--> NFT
+                    WC <--> Fund
+                    WC <--> USDC
+                    
+                    %% Backend connections
+                    API <--> DB
+                    API <--> Oracle
+                    Oracle <--> GST
+                    Oracle <--> ERP
+                    Oracle <--> LOG
+                    Oracle <--> IPFS
+                    
+                    %% Oracle to blockchain
+                    Oracle --> NFT
+                    Oracle --> Fund
+                    Oracle --> Rep
+                    
+                    %% Contract interactions
+                    NFT <--> Fund
+                    Fund <--> Rep
+                    Fund <--> USDC
+                    
+                    style UI fill:#667eea,stroke:#333,stroke-width:2px,color:#fff
+                    style NFT fill:#10b981,stroke:#333,stroke-width:2px,color:#fff
+                    style Fund fill:#10b981,stroke:#333,stroke-width:2px,color:#fff
+                    style Rep fill:#10b981,stroke:#333,stroke-width:2px,color:#fff
+                    style USDC fill:#10b981,stroke:#333,stroke-width:2px,color:#fff
+                    style Oracle fill:#f59e0b,stroke:#333,stroke-width:2px,color:#fff
+                    style DB fill:#6b7280,stroke:#333,stroke-width:2px,color:#fff
+            </div>
+        </div>
+
+        <div class="diagram-section">
+            <h2>Invoice Financing Flow</h2>
+            <p class="description">
+                End-to-end flow showing how an invoice moves from creation to settlement, 
+                involving all parties (Supplier, Buyer, Lender) and system components.
+            </p>
+            <div class="mermaid">
+                sequenceDiagram
+                    participant S as Supplier
+                    participant UI as Frontend
+                    participant API as Backend/Oracle
+                    participant BC as Blockchain
+                    participant B as Buyer
+                    participant L as Lender
+                    
+                    Note over S,L: Invoice Creation & Verification Phase
+                    
+                    S->>UI: Upload Invoice (PDF + Metadata)
+                    UI->>API: Submit Invoice Data
+                    API->>API: Verify GST
+                    API->>API: Verify ERP
+                    API->>API: Verify Logistics
+                    
+                    alt Verification Success
+                        API->>BC: Mint Invoice NFT
+                        BC-->>API: Token ID
+                        API->>BC: Register for Funding
+                        BC-->>API: Registration Success
+                        API-->>UI: Invoice Verified & Minted
+                        UI-->>S: Success (Token ID)
+                    else Verification Failed
+                        API-->>UI: Verification Failed
+                        UI-->>S: Error Message
+                    end
+                    
+                    Note over S,L: Buyer Acceptance Phase
+                    
+                    B->>UI: View Pending Invoices
+                    UI->>API: Get Buyer Invoices
+                    API-->>UI: Invoice List
+                    B->>UI: Accept Invoice
+                    UI->>BC: Call acceptInvoice()
+                    BC-->>UI: Acceptance Confirmed
+                    UI-->>B: Invoice Accepted
+                    
+                    Note over S,L: Funding Phase
+                    
+                    L->>UI: Browse Marketplace
+                    UI->>API: Get Verified Invoices
+                    API-->>UI: Available Invoices
+                    L->>UI: Select Invoice to Fund
+                    UI->>BC: Approve USDC
+                    BC-->>UI: Approval Success
+                    UI->>BC: Call fundInvoiceWhole()
+                    BC->>BC: Transfer USDC to Supplier
+                    BC-->>UI: Funding Success
+                    UI-->>L: Invoice Funded
+                    UI-->>S: Payment Received
+                    
+                    Note over S,L: Settlement Phase
+                    
+                    B->>UI: View Active Payables
+                    UI->>API: Get Funded Invoices
+                    API-->>UI: Payables List
+                    B->>UI: Pay Invoice
+                    UI->>BC: Approve USDC
+                    BC-->>UI: Approval Success
+                    UI->>BC: Call buyerPay()
+                    BC->>BC: Transfer USDC to Lender
+                    BC->>BC: Update Reputation Scores
+                    BC-->>UI: Settlement Success
+                    UI-->>B: Invoice Settled
+                    UI-->>L: Payment Received
+                    
+                    Note over S,L: Complete - All parties benefit!
+            </div>
+        </div>
+
+        <div class="diagram-section">
+            <h2>Data Model (Entity Relationship Diagram)</h2>
+            <p class="description">
+                Database schema showing relationships between Users, Invoices, Funding Positions, 
+                Events, and Reputation Records.
+            </p>
+            <div class="mermaid">
+                erDiagram
+                    USER {
+                        string address PK
+                        string role
+                        string company_name
+                        string pan
+                        string gstin
+                        string phone
+                        string email
+                        string kyc_status
+                        int reputation_score
+                        timestamp created_at
+                    }
+                    
+                    INVOICE {
+                        int token_id PK
+                        string invoice_hash UK
+                        string supplier FK
+                        string buyer FK
+                        string invoice_number
+                        date issue_date
+                        date due_date
+                        bigint face_value
+                        string currency
+                        string token_uri
+                        string status
+                        boolean gst_verified
+                        boolean erp_verified
+                        boolean logistics_verified
+                        timestamp registered_at
+                    }
+                    
+                    FUNDING_POSITION {
+                        int token_id PK
+                        string funder FK
+                        bigint purchase_price
+                        bigint face_value
+                        timestamp funded_at
+                        timestamp due_date
+                        string status
+                        timestamp settled_at
+                    }
+                    
+                    EVENT {
+                        int id PK
+                        int token_id FK
+                        string event_type
+                        json payload
+                        string tx_hash
+                        timestamp created_at
+                    }
+                    
+                    REPUTATION_RECORD {
+                        string address PK
+                        int score
+                        boolean blacklisted
+                        int total_transactions
+                        int successful_transactions
+                        int defaulted_transactions
+                        timestamp last_updated
+                    }
+                    
+                    INVOICE_NFT {
+                        int token_id PK
+                        string invoice_hash
+                        string supplier
+                        string buyer
+                        string token_uri
+                        timestamp minted_at
+                    }
+                    
+                    USER ||--o{ INVOICE : "creates as supplier"
+                    USER ||--o{ INVOICE : "accepts as buyer"
+                    USER ||--o{ FUNDING_POSITION : "funds as lender"
+                    INVOICE ||--|| INVOICE_NFT : "tokenized as"
+                    INVOICE ||--o| FUNDING_POSITION : "funded by"
+                    INVOICE ||--o{ EVENT : "generates"
+                    USER ||--|| REPUTATION_RECORD : "has"
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#667eea',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#764ba2',
+                lineColor: '#667eea',
+                secondaryColor: '#f0f0f0',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>

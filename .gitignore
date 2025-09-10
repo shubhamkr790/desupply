@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Production builds
+frontend/dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.production.local
+.env.sepolia
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database
+*.db
+database.db
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+cache/
+
+# Hardhat
+artifacts/
+cache/
+typechain-types/
+
+# Uploads
+uploads/
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp

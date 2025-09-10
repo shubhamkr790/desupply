@@ -1,0 +1,68 @@
+sequenceDiagram
+    participant S as Supplier
+    participant UI as Frontend
+    participant API as Backend/Oracle
+    participant BC as Blockchain
+    participant B as Buyer
+    participant L as Lender
+    
+    Note over S,L: Invoice Creation & Verification Phase
+    
+    S->>UI: Upload Invoice (PDF + Metadata)
+    UI->>API: Submit Invoice Data
+    API->>API: Verify GST
+    API->>API: Verify ERP
+    API->>API: Verify Logistics
+    
+    alt Verification Success
+        API->>BC: Mint Invoice NFT
+        BC-->>API: Token ID
+        API->>BC: Register for Funding
+        BC-->>API: Registration Success
+        API-->>UI: Invoice Verified & Minted
+        UI-->>S: Success (Token ID)
+    else Verification Failed
+        API-->>UI: Verification Failed
+        UI-->>S: Error Message
+    end
+    
+    Note over S,L: Buyer Acceptance Phase
+    
+    B->>UI: View Pending Invoices
+    UI->>API: Get Buyer Invoices
+    API-->>UI: Invoice List
+    B->>UI: Accept Invoice
+    UI->>BC: Call acceptInvoice()
+    BC-->>UI: Acceptance Confirmed
+    UI-->>B: Invoice Accepted
+    
+    Note over S,L: Funding Phase
+    
+    L->>UI: Browse Marketplace
+    UI->>API: Get Verified Invoices
+    API-->>UI: Available Invoices
+    L->>UI: Select Invoice to Fund
+    UI->>BC: Approve USDC
+    BC-->>UI: Approval Success
+    UI->>BC: Call fundInvoiceWhole()
+    BC->>BC: Transfer USDC to Supplier
+    BC-->>UI: Funding Success
+    UI-->>L: Invoice Funded
+    UI-->>S: Payment Received
+    
+    Note over S,L: Settlement Phase
+    
+    B->>UI: View Active Payables
+    UI->>API: Get Funded Invoices
+    API-->>UI: Payables List
+    B->>UI: Pay Invoice
+    UI->>BC: Approve USDC
+    BC-->>UI: Approval Success
+    UI->>BC: Call buyerPay()
+    BC->>BC: Transfer USDC to Lender
+    BC->>BC: Update Reputation Scores
+    BC-->>UI: Settlement Success
+    UI-->>B: Invoice Settled
+    UI-->>L: Payment Received
+    
+    Note over S,L: Complete - All parties benefit!

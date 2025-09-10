@@ -1,0 +1,200 @@
+/* Shared dashboard styles */
+.supplier-dashboard, .lender-marketplace, .buyer-payables {
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  min-height: calc(100vh - 140px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header, .marketplace-header, .payables-header {
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1, .marketplace-header h1, .payables-header h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.header-stats {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.header-stats .stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-value.success {
+  color: #10b981;
+}
+
+.stat-value.warning {
+  color: #f59e0b;
+}
+
+.dashboard-content, .marketplace-content, .payables-content {
+  display: grid;
+  gap: 40px;
+}
+
+.upload-section, .available-section, .funded-section, .invoices-section, .section {
+  margin-bottom: 30px;
+}
+
+.upload-section h2, .section h2 {
+  color: #333;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-form {
+  display: grid;
+  gap: 20px;
+  max-width: 600px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.invoices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.invoice-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.invoice-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.invoice-header h3 {
+  color: #333;
+  margin: 0;
+}
+
+.invoice-details {
+  display: grid;
+  gap: 10px;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.detail .label {
+  color: #666;
+}
+
+.detail .value {
+  color: #333;
+  font-weight: 500;
+}
+
+.fund-btn, .accept-btn, .pay-btn {
+  width: 100%;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.no-invoices {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.apr-badge {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.blockchain-status {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.status-flags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.flag {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.file-selected {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f0fdf4;
+  color: #166534;
+  border-radius: 6px;
+  font-size: 14px;
+  border: 1px solid #86efac;
+}

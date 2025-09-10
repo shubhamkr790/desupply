@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: desupply
+    env: node
+    plan: free
+    buildCommand: npm run build:frontend && npm run build:backend
+    startCommand: cd backend && npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production

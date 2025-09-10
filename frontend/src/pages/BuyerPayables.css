@@ -1,0 +1,27 @@
+@import './Dashboard.css';
+
+/* Additional buyer-specific styles can be added here */
+.due-date-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.due-date-badge.overdue {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.due-date-badge.urgent {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.due-date-badge.normal {
+  background: #e0e7ff;
+  color: #3730a3;
+}
