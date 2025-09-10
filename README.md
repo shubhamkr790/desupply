@@ -9,7 +9,7 @@
 DeSupply revolutionizes supply chain finance by tokenizing invoices as NFTs, enabling suppliers to get immediate liquidity while providing buyers and lenders with transparent, secure trading mechanisms.
 
 ### 🔗 Live Demo
-- **🌐 Frontend**: [DeSupply](https://desupply-production.up.railway.app/)
+- **🌐 Web App**: [DeSupply](https://desupply-production.up.railway.app/)
 - **⛓️ Smart Contracts**: Deployed on Sepolia Testnet
 - **🔧 Backend API**: RESTful API with Oracle integration
 - **📊 Repository**: [GitHub - DeSupply](https://github.com/shubhamkr790/desupply)
