@@ -29,15 +29,6 @@ app.use('/uploads', express.static(path.join(__dirname, '..', '..', 'uploads')))
 const frontendDist = path.join(__dirname, '..', '..', 'frontend', 'dist');
 if (fs.existsSync(frontendDist)) {
   app.use(express.static(frontendDist));
-  
-  // Handle SPA routing - serve index.html for non-API routes
-  app.get('*', (req, res) => {
-    // Don't serve index.html for API routes
-    if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/') || req.path === '/health') {
-      return res.status(404).json({ error: 'API endpoint not found' });
-    }
-    res.sendFile(path.join(frontendDist, 'index.html'));
-  });
 }
 
 // Configure multer for file uploads
@@ -204,6 +195,14 @@ app.get('/api/contracts', (req, res) => {
     reputation: process.env.REPUTATION_ADDRESS
   });
 });
+
+// Handle SPA routing - serve index.html for non-API routes (must be last)
+const frontendDistPath = path.join(__dirname, '..', '..', 'frontend', 'dist');
+if (fs.existsSync(frontendDistPath)) {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {
