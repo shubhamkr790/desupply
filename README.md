@@ -14,6 +14,8 @@ DeSupply revolutionizes supply chain finance by tokenizing invoices as NFTs, ena
 - **🔧 Backend API**: RESTful API with Oracle integration
 - **📊 Repository**: [GitHub - DeSupply](https://github.com/shubhamkr790/desupply)
 
+![Frontend Screenshot](/frontend/frontend.png)
+
 ---
 
 ## ✨ Key Features
